@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<!-- GR4 - Tennis Buddy Prototype -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tennis Buddy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <!--------- COACH VIEW --------->
+  <div id="topbar">
+    <div id="topbar-logo" class="tennis-buddy-logo">Tennis Buddy</div>
+    <div id="topbar-options">
+      <div id="menu-tabs">
+        <input id="tab-logger" type="radio" name="tabs" checked>
+        <label for="tab-logger">Logger</label>
+
+        <input id="tab-stats" type="radio" name="tabs">
+        <label for="tab-stats">Stats</label>
+      </div>
+
+      <div id="menu-menu" class="menu-item-wrapper">
+        <div class="menu-item">
+          <img src="./graphics/menu-icon.png" alt="Menu">
+        </div>
+        <div class="menu-popup">
+          <div class="menu-popup-container">
+            <div id="new-match" class="menu-item">New Match</div>
+            <div id="current-matches" class="menu-item-wrapper">
+              <div class="menu-item">Current Matches</div>
+              <div id="current-matches-empty">No match in progress</div>
+              <div id="current-matches-list" class="menu-dropdown"></div>
+            </div>
+            <div id="history" class="menu-item">History</div>
+            <div class="menu-item logout">Log Out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="container">
+    <div id="content">
+      <div id="player-names">
+        <div class="names_header">
+
+          <div class = "player_label" id="player_left">Steve</div>
+          <button id="swap_btn">
+            <img src="./graphics/swap.png" id="swap_icon">
+          </button>
+          <div class = "player_label" id="player_right">Jim</div>
+
+        </div>
+      </div>
+
+      <div id="logging-ui">
+	    <div id="tennis-court">
+	      <img src="graphics/tennis-court.svg" id="tennis-court">
+          <img src="graphics/tennis-player.svg" class="hidden" id="tennis-player">
+          <img src="graphics/tennis-player-red.svg" class="hidden" id="tennis-player-red">
+          <img src="graphics/tennis-ball.svg" class="hidden" id="tennis-ball">
+          <img src="graphics/tennis-ball-red.svg" class="hidden" id="tennis-ball-red">
+	    </div>
+      </div>
+      <div id="stats-ui">
+      </div>
+    </div>
+
+    <!-- Right-hand navigation bar goes here -->
+    <div id="right-column">
+      <div id="top-right-column">
+        <div id="end-match">End This Match</div>
+        <!-- Scores -->
+        <div class="score_menu_container" id="score_menu">
+          <div class="score_column_container">
+            <div class="score_column" id="score_column_player1">
+
+              <div class="set_score_box">
+                <div class="score_player_label">Steve</div>
+              </div>
+
+              <!--
+              <div class="set_score_box">
+                <div class="set_score_displayed">3</div>
+              </div>
+
+              <div class="set_score_box">
+                <div class="set_score_displayed">6</div>
+              </div>
+              -->
+
+              <div class="score_controller_container">
+                <div class = "score_num" id ="score_p1">0</div>
+                <div>
+                  <div class = "score_inc_btn" id="inc_score_p1">+</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="score_column" id="score_column_player2">
+
+              <div class="set_score_box">
+                <div class="score_player_label">( blah )</div>
+              </div>
+
+              <!--
+              <div class="set_score_box">
+                <div class="set_score_displayed">6</div>
+              </div>
+
+              <div class="set_score_box">
+                <div class="set_score_displayed">5</div>
+              </div>
+              -->
+
+              <div class="score_controller_container">
+                <div class = "score_num" id ="score_p2">0</div>
+                <div>
+                  <div class = "score_inc_btn" id="inc_score_p2">+</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div id="score_undo">Undo Score</div>
+        </div>
+        <!-- /Scores -->
+      </div>
+
+      <!-- Logging Toolbar -->
+      <div id="logging-toolbar">
+  	    <input type="button" class="toolbar-button borderless" id="forehand-button" value="(F)orehand">
+  	    <input type="button" class="toolbar-button borderless" id="backhand-button" value="(B)ackhand">
+        <input type="button" class="toolbar-button borderless" id="volley-button" value="(V)olley">
+        <input type="button" class="toolbar-button borderless" id="slice-button" value="(S)lice">
+        <input type="button" class="toolbar-button borderless" id="unspecified-button" value="(U)nspecified">
+        <div id="menu-undo">Undo Shot</div>
+      </div>
+      <!-- /Logging Toolbar -->
+    </div>
+    <!-- /#right-column -->
+  </div>
+  <!-- /#container -->
+
+  <!-- Stats Popup -->
+  <div id="menu-popup-stats" class="menu-popup">
+    <div class="stats_menu_container">
+      <div class="stats_menu_table_container">
+        <div class = "stats_menu_col" id = "stats-summary">
+          <div class="stats_menu_table_header">Match Statistics</div>
+
+          <div class="stats_menu_table_row">
+            <img src="graphics/blue-pin.png" class="shot-pin-display">
+            <div class="stats_stroke_name">Forehands</div>
+            <img src="graphics/forehand_icon.png" class="stats_icon">
+            <div class="forehand_stat">35%</div>
+          </div>
+
+          <div class="stats_menu_table_row">
+              <img src="graphics/red-pin.png" class="shot-pin-display">
+
+              <div class="stats_stroke_name">Backhands</div>
+              <img src="graphics/backhand_icon.png" class="stats_icon">
+              <div class="backhand_stat">50%</div>
+          </div>
+
+          <div class="stats_menu_table_row">
+              <img src="graphics/pink-pin.png" class="shot-pin-display">
+
+              <div class="stats_stroke_name">Volleys</div>
+              <img src="graphics/volley_icon.png" class="stats_icon">
+              <div class="volley_stat"> 8%</div>
+          </div>
+
+          <div class="stats_menu_table_row">
+              <img src="graphics/black-pin.png" class="shot-pin-display">
+
+              <div class="stats_stroke_name">Slices</div>
+              <img src="graphics/slice_icon.png" class="stats_icon">
+              <div class="slice_stat"> 7%</div>
+          </div>
+
+          <div class="stats_menu_table_row">
+              <img src="graphics/green-pin.png" class="shot-pin-display">
+
+              <div class="stats_stroke_name">Unspecified</div>
+              <img src="graphics/unspecified_icon.png" class="stats_icon">
+              <div class="unspecified_stat"> 7%</div>
+          </div>
+
+        </div>
+        <div class = "stats_menu_col">
+            <img src="graphics/tennis-court-stats4.png" class="court_stats_icon">
+            <div id="tennis_stats_court">
+              <img src="graphics/blue-pin.png" class="shot-pin">
+            </div>
+        </div>
+      </div>
+
+      <!--
+      <div>
+        <div id="court-view-text">Player Court Positions</div>
+        <button class="toggle_stats_btn" id="toggle_stats_btn">Toggle View</button>
+      </div>-->
+      <div class="toggle_stats_container">
+  	    <input type="button" class="stats-toggle-button borderless" id="coach-player-position-button" value="View Player Position">
+  	    <input type="button" class="stats-toggle-button borderless" id="coach-shot-position-button" value="View Shot Placement">
+      </div>
+      <div class="feedback_menu_container" id="feedback_menu">
+        <div class="feedback_menu_header_container">
+          Feedback for <span id="feedback_player">Player</span>:
+        </div>
+        <textarea rows="3" id="feedback_text" placeholder="Write your feedback here!"></textarea>
+        <button class="feedback_btn" id="send_fb_btn">Send</button>
+      </div>
+    </div>
+  </div>
+  <!-- /Stats Popup -->
+
+
+  <!-- History Popup -->
+  <div id="menu-popup-history" class="menu-popup">
+    <div class="history-menu-container">
+      <div class="history-table-header">History</div>
+      <table class="history-table">
+        <tr class="history-table-empty"><td>
+          No match to show. Current matches will appear here once they are ended.
+        </td></tr>
+      </table>
+    </div>
+  </div>
+  <!-- /History Popup -->
+
+
+  <!--------- PLAYER VIEW --------->
+
+  <!-- Stats (Player View Topbar) -->
+  <div id="player-view-topbar">
+    <div id="topbar-logo" class="tennis-buddy-logo">Tennis Buddy</div>
+    <div id="topbar-options">
+      <div id="menu-menu" class="menu-item-wrapper">
+        <div class="menu-item">
+          <img src="./graphics/menu-icon.png" alt="Menu">
+        </div>
+        <div class="menu-popup">
+          <div class="menu-popup-container">
+            <div id="player-matches" class="menu-item">Your Matches</div>
+            <div class="menu-item logout">Log Out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats (Player View Content) -->
+  <div id="player-view-content" class="menu-popup">
+    <div>
+      <div class="stats_menu_table_container">
+        <div class = "stats_menu_col" id = "stats-summary">
+          <div class="stats_menu_table_header">Match Statistics</div>
+          <!-- <div class="stats_menu_table_subheader">April 20, 10am</div> -->
+
+          <div class="stats_menu_table_row">
+            <img src="graphics/blue-pin.png" class="shot-pin-display">
+            <div class="stats_stroke_name">Forehands</div>
+            <img src="graphics/forehand_icon.png" class="stats_icon">
+            <div class="forehand_stat">35%</div>
+          </div>
+
+          <div class="stats_menu_table_row">
+              <img src="graphics/red-pin.png" class="shot-pin-display">
+
+              <div class="stats_stroke_name">Backhands</div>
+              <img src="graphics/backhand_icon.png" class="stats_icon">
+              <div class="backhand_stat">50%</div>
+          </div>
+
+          <div class="stats_menu_table_row">
+              <img src="graphics/pink-pin.png" class="shot-pin-display">
+
+              <div class="stats_stroke_name">Volleys</div>
+              <img src="graphics/volley_icon.png" class="stats_icon">
+              <div class="volley_stat"> 8%</div>
+          </div>
+
+          <div class="stats_menu_table_row">
+              <img src="graphics/black-pin.png" class="shot-pin-display">
+
+              <div class="stats_stroke_name">Slices</div>
+              <img src="graphics/slice_icon.png" class="stats_icon">
+              <div class="slice_stat"> 7%</div>
+          </div>
+
+          <div class="stats_menu_table_row">
+              <img src="graphics/green-pin.png" class="shot-pin-display">
+
+              <div class="stats_stroke_name">Unspecified</div>
+              <img src="graphics/unspecified_icon.png" class="stats_icon">
+              <div class="unspecified_stat"> 7%</div>
+          </div>
+
+        </div>
+        <div class = "stats_menu_col">
+            <img src="graphics/tennis-court-stats4.png" class="court_stats_icon">
+
+            <div id="tennis_player_stats_court">
+
+              <img src="graphics/blue-pin.png" class="shot-pin">
+            </div>
+        </div>
+      </div>
+
+      <div class="toggle_stats_container">
+  	    <input type="button" class="stats-toggle-button borderless" id="player-player-position-button" value="View Player Position">
+  	    <input type="button" class="stats-toggle-button borderless" id="player-shot-position-button" value="View Shot Placement">
+      </div>
+
+      <div class="feedback_viewer_container">
+        <div class="feedback_viewer_header_container"></div>
+      </div>
+    </div>
+  </div>
+  <!-- /Stats (Player View Content) -->
+
+  <!-- History Popup (Player View History) -->
+  <div id="menu-popup-player-history" class="menu-popup">
+    <div class="history-menu-container">
+      <div class="history-table-header">Your Matches</div>
+      <table class="history-table">
+        <tr class="history-table-empty"><td>
+          No match recorded yet.
+        </td></tr>
+      </table>
+    </div>
+  </div>
+  <!-- /History Popup (Player View History) -->
+
+
+
+  <!--------- LOGIN VIEW --------->
+  <div id="login-view">
+    <div id="login-container">
+      <div id="login-logo" class="tennis-buddy-logo">Tennis Buddy</div>
+      <div id="login-title">Welcome!</div>
+      <input id="login-username" type="text" placeholder="Username" autofocus>
+      <input id="login-password" type="password" placeholder="Password">
+      <div id="login-button">Log In</div>
+    </div>
+  </div>
+
+
+  <!-- Modal Stroke Error Confirmation Box -->
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-content-header">
+        <div>How Did the Point End?</div>
+        <div class="close" id="shot_modal_close">&times;</div>
+      </div>
+      <div id="point_end_options_container">
+        <div class="point_end_btn_container">
+          <img src = "./graphics/forced_error.png" class="point_icon">
+          <div id="forced_error_btn" class="shot_ending_type">Forced Error</div>
+        </div>
+        <div class="point_end_btn_container">
+          <img src = "./graphics/unforced_error.png" class="point_icon">
+          <div id="unforced_error_btn" class="shot_ending_type">Unforced Error</div>
+        </div>
+        <div class="point_end_btn_container">
+          <img src = "./graphics/ace.png" class="point_icon">
+          <div id="ace_btn" class="shot_ending_type">Ace</div>
+        </div>
+        <div class="point_end_btn_container">
+          <img src = "./graphics/winner.png" class="point_icon">
+          <div id="winner_btn" class="shot_ending_type">Winner</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Creating a New Match -->
+  <div id="new-match-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-content-header">
+         <div>Create a New Match</div>
+         <div class="close">&times;</div>
+      </div>
+      <div class="modal-row">
+        <label for="player-name-input">Player Name:</label>
+        <select id="player-name-input">
+          <option value="steve">Steve</option>
+          <option value="john">John</option>
+          <option value="kevin">Kevin</option>
+        </select>
+      </div>
+      <div class="modal-row plain-text">
+        vs.
+      </div>
+      <div class="modal-row">
+        <label for="opponent-name-input">Opponent Name:</label>
+        <input id="opponent-name-input" type="text" placeholder="(optional)">
+      </div>
+      <div class="modal-row">
+        <div class="modal-submit">Create</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Ending the Current Match -->
+  <div id="end-match-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-content-header">
+         <div>Do you want to end <span class="current-player-name"></span>'s match?</div>
+         <div class="close">&times;</div>
+      </div>
+      <div class="modal-row plain-text">
+        You can't log additional stats once you end this match, but
+        you can still view stats and write feedback in 'History'.
+      </div>
+      <div class="modal-row">
+        <div class="modal-cancel">Cancel</div>
+        <div class="modal-submit">End Game</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for all the current matches -->
+  <div id="all-current-matches-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-content-header">
+         <div>Matches in Progress</div>
+         <div class="close">&times;</div>
+      </div>
+      <div class="modal-row">
+        <table>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
